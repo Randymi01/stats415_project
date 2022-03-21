@@ -1,0 +1,113 @@
+---
+title: "Stats 415 Project"
+author: "Morgan Tatrow"
+date: "3/20/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r}
+library(haven)
+library(dplyr)
+smqf <- read_xpt("Data\\SMQ_F.XPT")
+smqg <- read_xpt("Data\\SMQ_G.XPT")
+smqh <- read_xpt("Data\\SMQ_H.XPT")
+smqi <- read_xpt("Data\\SMQ_I.XPT")
+smqj <- read_xpt("Data\\SMQ_J.XPT")
+
+tcholf <- read_xpt("Data\\TCHOL_F.XPT")
+tcholg <- read_xpt("Data\\TCHOL_G.XPT")
+tcholh <- read_xpt("Data\\TCHOL_H.XPT")
+tcholi <- read_xpt("Data\\TCHOL_I.XPT")
+tcholj <- read_xpt("Data\\TCHOL_J.XPT")
+
+dr1totf <- read_xpt("Data\\DR1TOT_F.XPT")
+dr1totg <- read_xpt("Data\\DR1TOT_G.XPT")
+dr1toth <- read_xpt("Data\\DR1TOT_H.XPT")
+dr1toti <- read_xpt("Data\\DR1TOT_I.XPT")
+dr1totj <- read_xpt("Data\\DR1TOT_J.XPT")
+
+demof <- read_xpt("Data\\DEMO_F.XPT")
+demog <- read_xpt("Data\\DEMO_G.XPT")
+demoh <- read_xpt("Data\\DEMO_H.XPT")
+demoi <- read_xpt("Data\\DEMO_I.XPT")
+demoj <- read_xpt("Data\\DEMO_J.XPT")
+
+bpxf <- read_xpt("Data\\BPX_F.XPT")
+bpxg <- read_xpt("Data\\BPX_G.XPT")
+bpxh <- read_xpt("Data\\BPX_H.XPT")
+bpxi <- read_xpt("Data\\BPX_I.XPT")
+bpxj <- read_xpt("Data\\BPX_J.XPT")
+
+bmxf <- read_xpt("Data\\BMX_F.XPT")
+bmxg <- read_xpt("Data\\BMX_G.XPT")
+bmxh <- read_xpt("Data\\BMX_H.XPT")
+bmxi <- read_xpt("Data\\BMX_I.XPT")
+bmxj <- read_xpt("Data\\BMX_J.XPT")
+```
+```{r}
+full_2009 <-merge(bmxf, bpxf, by = "SEQN")
+full_2009 <-merge(full_data, smqf, by = "SEQN")
+full_2009 <-merge(full_data, tcholf, by = "SEQN")
+full_2009 <-merge(full_data, dr1totf, by = "SEQN")
+full_2009 <-merge(full_data, demof, by = "SEQN")
+
+
+full_2010 <-merge(bmxg, bpxg, by = "SEQN")
+full_2010 <-merge(full_2010, smqg, by = "SEQN")
+full_2010 <-merge(full_2010, tcholg, by = "SEQN")
+full_2010 <-merge(full_2010, dr1totg, by = "SEQN")
+full_2010 <-merge(full_2010, demog, by = "SEQN")
+
+
+full_2011 <-merge(bmxh, bpxh, by = "SEQN")
+full_2011 <-merge(full_2011, smqh, by = "SEQN")
+full_2011 <-merge(full_2011, tcholh, by = "SEQN")
+full_2011 <-merge(full_2011, dr1toth, by = "SEQN")
+full_2011 <-merge(full_2011, demoh, by = "SEQN")
+
+full_2012 <-merge(bmxi, bpxi, by = "SEQN")
+full_2012 <-merge(full_2012, bmxi, by = "SEQN")
+full_2012 <-merge(full_2012, smqi, by = "SEQN")
+full_2012 <-merge(full_2012, tcholi, by = "SEQN")
+full_2012 <-merge(full_2012, dr1toti, by = "SEQN")
+full_2012 <-merge(full_2012, demoi, by = "SEQN")
+
+full_2013 <-merge(bmxj, bpxj, by = "SEQN")
+full_2013 <-merge(full_2013, bmxj, by = "SEQN")
+full_2013 <-merge(full_2013, smqj, by = "SEQN")
+full_2013 <-merge(full_2013, tcholj, by = "SEQN")
+full_2013 <-merge(full_2013, dr1totj, by = "SEQN")
+full_2013 <-merge(full_2013, demoj, by = "SEQN")
+
+full_data = bind_rows(full_2009, full_2010)
+full_data = bind_rows(full_data, full_2011)
+full_data = bind_rows(full_data, full_2012)
+full_data = bind_rows(full_data, full_2013)
+```
+
+```{r}
+# drop cols on full data
+
+drop_cols = c("SMDUPCA", "SMD100BR", "DR1DRSTZ", "DRABF", "RIDSTATR")
+
+full_data = full_data[,!(names(full_data)) %in% drop_cols]
+write.csv(full_data, "Data/full_data.csv", row.names = FALSE)
+```
+
+```{r}
+# Load testing and training SEQNs This is FAKE
+training_seqn = read.csv(file = 'Data/train.csv')
+
+training_set = merge(full_data, training_seqn, by = "SEQN")
+
+testing_seqn = read.csv(file = "Data/test.csv")
+
+testing_seqn["y"] = runif(dim(testing_seqn)[1], -2, 2)
+
+
+
+write.csv(testing_seqn, "testing_fake.csv",row.names = FALSE)
+```
