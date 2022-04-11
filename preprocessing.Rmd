@@ -49,10 +49,10 @@ bmxj <- read_xpt("Data\\BMX_J.XPT")
 ```
 ```{r}
 full_2009 <-merge(bmxf, bpxf, by = "SEQN")
-full_2009 <-merge(full_data, smqf, by = "SEQN")
-full_2009 <-merge(full_data, tcholf, by = "SEQN")
-full_2009 <-merge(full_data, dr1totf, by = "SEQN")
-full_2009 <-merge(full_data, demof, by = "SEQN")
+full_2009 <-merge(full_2009, smqf, by = "SEQN")
+full_2009 <-merge(full_2009, tcholf, by = "SEQN")
+full_2009 <-merge(full_2009, dr1totf, by = "SEQN")
+full_2009 <-merge(full_2009, demof, by = "SEQN")
 
 
 full_2010 <-merge(bmxg, bpxg, by = "SEQN")
@@ -69,14 +69,12 @@ full_2011 <-merge(full_2011, dr1toth, by = "SEQN")
 full_2011 <-merge(full_2011, demoh, by = "SEQN")
 
 full_2012 <-merge(bmxi, bpxi, by = "SEQN")
-full_2012 <-merge(full_2012, bmxi, by = "SEQN")
 full_2012 <-merge(full_2012, smqi, by = "SEQN")
 full_2012 <-merge(full_2012, tcholi, by = "SEQN")
 full_2012 <-merge(full_2012, dr1toti, by = "SEQN")
 full_2012 <-merge(full_2012, demoi, by = "SEQN")
 
 full_2013 <-merge(bmxj, bpxj, by = "SEQN")
-full_2013 <-merge(full_2013, bmxj, by = "SEQN")
 full_2013 <-merge(full_2013, smqj, by = "SEQN")
 full_2013 <-merge(full_2013, tcholj, by = "SEQN")
 full_2013 <-merge(full_2013, dr1totj, by = "SEQN")
@@ -98,16 +96,7 @@ write.csv(full_data, "Data/full_data.csv", row.names = FALSE)
 ```
 
 ```{r}
-# Load testing and training SEQNs This is FAKE
-training_seqn = read.csv(file = 'Data/train.csv')
-
-training_set = merge(full_data, training_seqn, by = "SEQN")
-
-testing_seqn = read.csv(file = "Data/test.csv")
-
-testing_seqn["y"] = runif(dim(testing_seqn)[1], -2, 2)
-
-
-
-write.csv(testing_seqn, "testing_fake.csv",row.names = FALSE)
+colnames(full_data)
+x = full_data$BMIHEAD
+x = x[!is.na(x)]
 ```

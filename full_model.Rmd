@@ -1,0 +1,30 @@
+---
+title: "Kaggle Sub"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+# Read in datasets
+df = read.csv("data/full_data.csv")
+training_set = read.csv("data/train.csv")
+testing_set = read.csv("data/test.csv")
+```
+
+```{r}
+# Create training and testing sets
+training_set = merge(training_set, df, by="SEQN")
+testing_set = merge(testing_set, df, by="SEQN")
+```
+
+```{r}
+# get nan_columns
+colnames(training_set)
+
+for(c in colnames(training_set)){
+  x = sum(!is.na(training_set[c]))
+  if(x==0){
+    print(c)
+  }
+}
+
+```
